@@ -58,3 +58,9 @@ hubClusterSets:
       quay-channel: stable-3.18
       quay-source: redhat-operators
       quay-source-namespace: openshift-marketplace
+      ### Node Feature Discovery MOD 6
+      node-feature-discovery: 'true'
+      node-feature-discovery-subscription-name: nfd
+      node-feature-discovery-channel: stable
+      node-feature-discovery-source: redhat-operators
+      node-feature-discovery-source-namespace: openshift-marketplace
