@@ -24,6 +24,13 @@ hubClusterSets:
         bootstrap:
           userInitialize: true
           xhrOnly: false
+      uwm:
+        prometheus:
+          retention: '24h'
+          storage: '10Gi'
+        thanosRuler:
+          retention: '24h'
+          storage: '5Gi'
     labels:
       # Required: OpenShift version for image mirroring and compatibility
       openshift-version: '4.20.36'
@@ -58,10 +65,16 @@ hubClusterSets:
       quay-channel: stable-3.18
       quay-source: redhat-operators
       quay-source-namespace: openshift-marketplace
+      ### Cluster install, enabled in Module 3. Removing these withdraws the
+      ### cluster-install policies while the spoke is still provisioning.
+      cluster-install: 'true'
+      acm-enable-provisioning: 'true'
       ### Node Feature Discovery MOD 6
-      node-feature-discovery: 'true'
+      node-feature-discovery: 'false'
       node-feature-discovery-subscription-name: nfd
       node-feature-discovery-channel: stable
       node-feature-discovery-source: redhat-operators
       node-feature-discovery-source-namespace: openshift-marketplace
       node-feature-discovery-version: 'nfd.4.20.0-202608311652'
+      ### User Workload Monitoring
+      uwm: 'true'
