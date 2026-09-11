@@ -80,3 +80,12 @@ hubClusterSets:
       uwm: 'true'
       ### console
       autoshift-console: 'true'
+      # =======================================================================
+      # Web Terminal
+      # =======================================================================
+      web-terminal: 'false'
+      web-terminal-subscription-name: web-terminal
+      web-terminal-channel: fast
+      web-terminal-version: 'web-terminal.v1.13.0'
+      web-terminal-source: redhat-operators
+      web-terminal-source-namespace: openshift-marketplace
