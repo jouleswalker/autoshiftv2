@@ -19,6 +19,11 @@
 # Minimum Hub Cluster Configuration
 hubClusterSets:
   hub:
+    config:
+      quay:
+        bootstrap:
+          userInitialize: true
+          xhrOnly: false
     labels:
       # Required: OpenShift version for image mirroring and compatibility
       openshift-version: '4.20.36'
@@ -35,7 +40,8 @@ hubClusterSets:
       gitops-source: redhat-operators
       gitops-source-namespace: openshift-marketplace
       # gitops-namespace: 'openshift-gitops'  # Override ArgoCD namespace per-cluster
-
+      gitops-cluster-ca-bundle: 'true'
+      
       ### Advanced Cluster Management (AUTOMATIC)
       # ACM is automatically installed on all hub clustersets by policy
       acm-subscription-name: advanced-cluster-management
@@ -46,3 +52,9 @@ hubClusterSets:
       # acm-search-storage-class: 'ocs-storagecluster-ceph-rbd'
       # acm-search-storage-size: '100Gi'
       #lab-test: 'true'
+      ### Quay
+      quay: 'true'
+      quay-subscription-name: quay-operator
+      quay-channel: stable-3.18
+      quay-source: redhat-operators
+      quay-source-namespace: openshift-marketplace
