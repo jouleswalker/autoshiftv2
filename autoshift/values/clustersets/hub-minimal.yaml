@@ -64,3 +64,4 @@ hubClusterSets:
       node-feature-discovery-channel: stable
       node-feature-discovery-source: redhat-operators
       node-feature-discovery-source-namespace: openshift-marketplace
+      node-feature-discovery-version: 'nfd.4.20.0-202608311652'
