@@ -78,3 +78,5 @@ hubClusterSets:
       node-feature-discovery-version: 'nfd.4.20.0-202608311652'
       ### User Workload Monitoring
       uwm: 'true'
+      ### console
+      autoshift-console: 'true'
