@@ -21,7 +21,6 @@ spec:
         spec:
           object-templates-raw: |
               {{ "{{-" }} $infrastructure_id := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName {{ "}}" }}
-              {{ "{{-" }} $version := "ocp4.22" {{ "}}" }}
               - complianceType: musthave
                 objectDefinition:
                   apiVersion: console.openshift.io/v1
@@ -29,7 +28,7 @@ spec:
                   metadata:
                     name: console-banner-name
                   spec:
-                    text: {{ "{{hub-" }} (printf " cluster name is %s" $infrastructure_id ) {{ "hub}}" }}
+                    text: {{ "{{hub-" }} (printf " cluster name is %s" $infrastructure_id) {{ "hub}}" }}
                     link:
                       href: 'https://www.example.com'
                       text: {{ "{{hub-" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}
