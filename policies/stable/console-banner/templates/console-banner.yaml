@@ -28,10 +28,10 @@ spec:
                   metadata:
                     name: console-banner-name
                   spec:
-                    text: {{ "{{hub-" }} (printf " cluster name is %s" $infrastructure_id) {{ "hub}}" }}
+                    text: {{ "{{hub" }} (printf " cluster name is %s" $infrastructure_id) {{ "hub}}" }}
                     link:
                       href: 'https://www.example.com'
-                      text: {{ "{{hub-" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}
+                      text: {{ "{{hub" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}
                     color: '#fff'
                     backgroundColor: '#0066cc'
           pruneObjectBehavior: None
