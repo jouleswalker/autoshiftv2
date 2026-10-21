@@ -20,7 +20,6 @@ spec:
           name: create-console
         spec:
           object-templates-raw: |
-              #{{ "{{hub" }} index .ManagedClusterLabels "autoshift.io/clusterName" | default "CLUSTER" {{ "hub}}" }}
               - complianceType: musthave
                 objectDefinition:
                   apiVersion: machine.openshift.io/v1beta1
@@ -30,7 +29,6 @@ spec:
                     name: example
                   spec:
                     text: {{ "{{hub" }} index .ManagedClusterLabels "name" | default "CLUSTER" {{ "hub}}" }}
-                    ###{{ "{{-" }} $clusterName {{ "-}}" }}
                     link:
                       href: 'https://www.example.com'
                       text: {{ "{{hub" }} index .ManagedClusterLabels "autoshift.io/clusterName" | default "CLUSTER" {{ "hub}}" }}
