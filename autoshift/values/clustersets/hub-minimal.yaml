@@ -89,3 +89,10 @@ hubClusterSets:
       web-terminal-version: 'web-terminal.v1.13.0'
       web-terminal-source: redhat-operators
       web-terminal-source-namespace: openshift-marketplace
+       ### Developer Spaces
+      dev-spaces: 'true'
+      dev-spaces-subscription-name: devspaces
+      dev-spaces-version: 'devspacesoperator.v3.30.0'
+      dev-spaces-channel: stable
+      dev-spaces-source: redhat-operators
+      dev-spaces-source-namespace: openshift-marketplace
