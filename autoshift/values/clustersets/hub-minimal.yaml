@@ -96,3 +96,5 @@ hubClusterSets:
       dev-spaces-channel: stable
       dev-spaces-source: redhat-operators
       dev-spaces-source-namespace: openshift-marketplace
+
+      console: "true"
