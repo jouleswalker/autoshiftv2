@@ -29,7 +29,7 @@ spec:
                   metadata:
                     name: console-banner-name
                   spec:
-                    text: {{ "{{hub" }} (printf " cluster name is: %s cluster version: %s" $infrastructure_id $version {{ "hub}}" }}
+                    text: {{ "{{hub" }} (printf " cluster name is: %s cluster version: %s" $infrastructure_id $version ) {{ "hub}}" }}
                     link:
                       href: 'https://www.example.com'
                       text: {{ "{{hub" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}
