@@ -30,7 +30,7 @@ spec:
                     text: {{ "{{hub" }} index .ManagedClusterLabels "name" | default "CLUSTER" {{ "hub}}" }}
                     link:
                       href: 'https://www.example.com'
-                      text: {{ "{{hub" }} index .ManagedClusterLabels "autoshift.io/clusterName" | default "CLUSTER" {{ "hub}}" }}
+                      text: {{ "{{hub" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}
                     color: '#fff'
                     backgroundColor: '#0066cc'
           pruneObjectBehavior: None
