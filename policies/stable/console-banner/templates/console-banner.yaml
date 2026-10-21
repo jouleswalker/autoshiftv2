@@ -22,7 +22,6 @@ spec:
           object-templates-raw: |
               - complianceType: musthave
                 objectDefinition:
-                  apiVersion: machine.openshift.io/v1beta1
                   apiVersion: console.openshift.io/v1
                   kind: ConsoleNotification
                   metadata:
