@@ -33,7 +33,7 @@ hubClusterSets:
           storage: '5Gi'
     labels:
       # Required: OpenShift version for image mirroring and compatibility
-      openshift-version: '4.20.36'
+      openshift-version: '4.21.37'
 
       # Required: Indicates this is a self-managed hub cluster
       self-managed: 'true'
