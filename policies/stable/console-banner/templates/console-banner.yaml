@@ -21,7 +21,7 @@ spec:
         spec:
           object-templates-raw: |
               {{ "{{-" }} $infrastructure_id := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName {{ "}}" }}
-              {{ "{{-" }} $version := "ocp4.22"
+              {{ "{{-" }} $version := "ocp4.22" {{ "}}" }}
               - complianceType: musthave
                 objectDefinition:
                   apiVersion: console.openshift.io/v1
