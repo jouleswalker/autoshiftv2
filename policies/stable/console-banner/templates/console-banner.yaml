@@ -20,14 +20,16 @@ spec:
           name: create-console
         spec:
           object-templates-raw: |
+              {{ "{{-" }} $infrastructure_id := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName {{ "}}" }}
+              {{ "{{-" }} $version := "ocp4.22"
               - complianceType: musthave
                 objectDefinition:
                   apiVersion: console.openshift.io/v1
                   kind: ConsoleNotification
                   metadata:
-                    name: example
+                    name: console-banner-name
                   spec:
-                    text: {{ "{{hub" }} index .ManagedClusterLabels "name" | default "CLUSTER" {{ "hub}}" }}
+                    text: {{ "{{hub" }} (printf " cluster name is: %s cluster version: %s" $infrastructure_id $version {{ "hub}}" }}
                     link:
                       href: 'https://www.example.com'
                       text: {{ "{{hub" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}
