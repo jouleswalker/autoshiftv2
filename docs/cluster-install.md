@@ -283,7 +283,7 @@ clusterInstall:
   workerAgents: 0                    # default: (len hosts) - controlPlaneAgents
   apiVip: '10.0.0.1'                # required for multi-node
   ingressVip: '10.0.0.2'            # required for multi-node
-  mastersSchedulable: false          # default: false
+  mastersSchedulable: false          # default: false, bare metal multi-node only
   cpuPartitioning: 'None'            # 'None' (default) or 'AllNodes' — install-time only, see docs/workload-partitioning.md
   pullSecretRef: 'default-pull-secret'
   bmcCredentialRef: 'default-bmc-cred'
@@ -738,12 +738,19 @@ Set `controlPlane.replicas: 1` and `workers.replicas: 0` under the platform bloc
 ```
 
 The single node runs the control plane and all workloads, so size the control plane
-accordingly — `m5.2xlarge` is the practical minimum on AWS.
+to match: `m5.2xlarge` is the practical minimum on AWS.
 
-SNO also provisions into a single availability zone, so it needs one NAT gateway and
-one Elastic IP rather than one per zone. That matters on sandbox AWS accounts, where
-the Elastic IP quota is commonly 5 and a multi-zone install fails partway through
-network creation with `AddressLimitExceeded`.
+On AWS, a single node does not mean a single availability zone. Unless you set `aws.zones`,
+the installation program creates a public subnet, a NAT gateway, and an Elastic IP
+in every zone in the region, whatever the replica count. That matters on sandbox AWS
+accounts, where the Elastic IP quota is commonly 5 and the install fails partway through
+network creation with `AddressLimitExceeded`. Pin SNO to one zone to use one Elastic IP:
+
+```yaml
+      aws:
+        zones:
+          - 'us-east-2a'
+```
 
 `workers.replicas: 0` produces a worker MachinePool with 0 replicas. That is expected
 and harmless: no MachineSets scale up.
@@ -891,6 +898,7 @@ For a complete working example, see `autoshift/values/clusters/_example-cluster-
 | `sshKeyRef` | No | - | Secret ref (`name`, `key`, `namespace`) for SSH public key |
 | `fips` | No | `false` | Enable Federal Information Processing Standards (FIPS) mode (requires RSA or ECDSA SSH keys, not ed25519) |
 | `networkType` | No | `OVNKubernetes` | SDN type |
+| `zones` | No | every zone in the region | Availability zones for the control plane, workers, and the worker `MachinePool`. Each zone gets its own NAT gateway and Elastic IP |
 | `controlPlane.instanceType` | No | `m5.xlarge` | Control plane EC2 instance type |
 | `controlPlane.rootVolume` | No | `{iops: 4000, size: 100, type: gp3}` | Control plane root volume config |
 | `workers.replicas` | No | `3` | Number of worker nodes |
