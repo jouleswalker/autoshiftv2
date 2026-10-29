@@ -49,6 +49,7 @@ object-templates-raw: |
   {{- $cpCpus := (index $controlPlane "cpus" | default 4 | toInt) }}
   {{- $cpMem := (index $controlPlane "memoryMB" | default 16384 | toInt) }}
   {{- $cpDisk := (index (index $controlPlane "osDisk" | default dict) "diskSizeGB" | default 120 | toInt) }}
+  {{- $cpZones := list }}
   {{- if hasKey $controlPlane "zones" }}{{- $cpZones := (index $controlPlane "zones") }}{{- end }}
   {{- $workers := (index $vsphere "workers" | default dict) }}
   {{- /* `default` treats 0 as empty, so an explicit 0 would become 3 and SNO would be unreachable */ -}}
@@ -58,6 +59,7 @@ object-templates-raw: |
   {{- $wkCpus := (index $workers "cpus" | default 8 | toInt) }}
   {{- $wkMem := (index $workers "memoryMB" | default 24576 | toInt) }}
   {{- $wkDisk := (index (index $workers "osDisk" | default dict) "diskSizeGB" | default 120 | toInt) }}
+  {{- $wkZones := list }}
   {{- if hasKey $workers "zones" }}{{- $wkZones := (index $workers "zones") }}{{- end }}
   {{- $hosts := (index $vsphere "hosts" | default list) }}
   {{- $networking := (index $config "networking") }}
