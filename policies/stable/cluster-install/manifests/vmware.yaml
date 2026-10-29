@@ -199,9 +199,9 @@ object-templates-raw: |
   {{- $cdNetwork = (index $networks0 0) }}
   {{- end }}
   {{- $tagIDs0 := (index $topo0 "tagIDs" | default list) }}
-  {{- $cdtagID := "" }}
+  {{- $cdTagID := "" }}
   {{- if (gt (len $tagIDs0) 0) }}
-  {{- $cdtagID = (index $tagIDs0 0) }}
+  {{- $cdTagID = (index $tagIDs0 0) }}
   {{- end }}
   {{- $cdFolder := (index $topo0 "folder" | default "") }}
 
