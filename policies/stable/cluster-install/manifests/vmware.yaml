@@ -49,6 +49,7 @@ object-templates-raw: |
   {{- $cpCpus := (index $controlPlane "cpus" | default 4 | toInt) }}
   {{- $cpMem := (index $controlPlane "memoryMB" | default 16384 | toInt) }}
   {{- $cpDisk := (index (index $controlPlane "osDisk" | default dict) "diskSizeGB" | default 120 | toInt) }}
+  {{- if hasKey $controlPlane "zones" }}{{- $cpZones := (index $controlPlane "zones") }}{{- end }}
   {{- $workers := (index $vsphere "workers" | default dict) }}
   {{- /* `default` treats 0 as empty, so an explicit 0 would become 3 and SNO would be unreachable */ -}}
   {{- $wkReplicas := 3 }}
@@ -57,6 +58,7 @@ object-templates-raw: |
   {{- $wkCpus := (index $workers "cpus" | default 8 | toInt) }}
   {{- $wkMem := (index $workers "memoryMB" | default 24576 | toInt) }}
   {{- $wkDisk := (index (index $workers "osDisk" | default dict) "diskSizeGB" | default 120 | toInt) }}
+  {{- if hasKey $workers "zones" }}{{- $wkZones := (index $workers "zones") }}{{- end }}
   {{- $hosts := (index $vsphere "hosts" | default list) }}
   {{- $networking := (index $config "networking") }}
   {{- $clusterNetwork := (index $networking "clusterNetwork") }}
@@ -86,7 +88,7 @@ object-templates-raw: |
       "datacenter" (index $topo "datacenter")
       "datastore" (index $topo "datastore")
       "networks" (index $topo "networks")
-      "resourcePool" (index $topo "resourcePool")
+      "tagIDs" (index $topo "tagIDs")
   ) }}
   {{- if (index $topo "folder") }}
   {{- $_ := set $fdTopo "folder" (index $topo "folder") }}
@@ -144,6 +146,7 @@ object-templates-raw: |
               "cpus" $cpCpus
               "memoryMB" $cpMem
               "osDisk" (dict "diskSizeGB" $cpDisk)
+              "zones" $cpZones
           ))
       )
       "compute" (list (dict
@@ -154,6 +157,7 @@ object-templates-raw: |
               "cpus" $wkCpus
               "memoryMB" $wkMem
               "osDisk" (dict "diskSizeGB" $wkDisk)
+              "zones" $wkZones
           ))
       ))
       "platform" (dict "vsphere" $vspherePlatform)
@@ -191,6 +195,11 @@ object-templates-raw: |
   {{- $cdNetwork := "" }}
   {{- if (gt (len $networks0) 0) }}
   {{- $cdNetwork = (index $networks0 0) }}
+  {{- end }}
+  {{- $tagIDs0 := (index $topo0 "tagIDs" | default list) }}
+  {{- $cdtagID := "" }}
+  {{- if (gt (len $tagIDs0) 0) }}
+  {{- $cdtagID = (index $tagIDs0 0) }}
   {{- end }}
   {{- $cdFolder := (index $topo0 "folder" | default "") }}
 
@@ -351,6 +360,7 @@ object-templates-raw: |
             defaultDatastore: {{ $cdDatastore }}
             cluster: {{ $cdCluster }}
             network: {{ $cdNetwork }}
+            tagIDs: {{ $cdTagID }}
           {{- if $cdFolder }}
             folder: {{ $cdFolder }}
           {{- end }}
