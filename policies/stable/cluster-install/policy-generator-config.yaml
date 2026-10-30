@@ -63,3 +63,10 @@ policies:
       - name: policy-cluster-install-secrets
     manifests:
       - path: manifests/vmware.yaml
+    # 6) Hive vSphere-test IPI install stack.
+  - name: policy-cluster-install-vmware-test
+    dependencies:
+      - name: policy-cluster-install-prereqs
+      - name: policy-cluster-install-secrets
+    manifests:
+      - path: manifests/vmware-test.yaml
