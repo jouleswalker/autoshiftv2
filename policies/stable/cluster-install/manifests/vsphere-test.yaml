@@ -85,7 +85,7 @@ object-templates-raw: |
   {{- $caRefNs := (index $caRef "namespace" | default $secretSourceNs) }}
   {{- $caRefCM := (lookup "v1" "ConfigMap" $caRefNs (index $caRef "name")) | default dict }}
   {{- $caRefData := (index $caRefCM "data" | default dict) }}
-  {{- $caTrustBundle = (index $caRefData (index $caRef "key")) | default $caTrustBundle) }}
+  {{- $caTrustBundle = (index $caRefData (index $caRef "key") | default $caTrustBundle) }}
   {{- end }}{{- $fdList := list }}
   {{- range $_, $fd := $failureDomains }}
   {{- $topo := (index $fd "topology" | default dict) }}
