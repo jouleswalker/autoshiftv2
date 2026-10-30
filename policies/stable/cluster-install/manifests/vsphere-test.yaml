@@ -55,7 +55,7 @@ object-templates-raw: |
   {{- $cpMem := (index $controlPlane "memoryMB" | default 16384 | toInt) }}
   {{- $cpDisk := (index (index $controlPlane "osDisk" | default dict) "diskSizeGB" | default 120 | toInt) }}
   {{- $cpZones := list }}
-  {{- if not (empty (index $controlPlane "zones")) }}{{- $cpZones := (index $controlPlane "zones") }}{{- end }}
+  {{- if not (empty (index $controlPlane "zones")) }}{{- $cpZones = (index $controlPlane "zones") }}{{- end }}
   {{- $workers := (index $vsphere "workers" | default dict) }}
   {{- /* `default` treats 0 as empty, so an explicit 0 would become 3 and SNO would be unreachable */ -}}
   {{- $wkReplicas := 3 }}
@@ -85,7 +85,7 @@ object-templates-raw: |
   {{- $caRefNs := (index $caRef "namespace" | default $secretSourceNs) }}
   {{- $caRefCM := (lookup "v1" "ConfigMap" $caRefNs (index $caRef "name")) | default dict }}
   {{- $caRefData := (index $caRefCM "data" | default dict) }}
-  {{- $caTrustBundle = (index $caRefData (index $caRef "key") | default $caTrustBundle) }}
+  {{- $caTrustBundle = (index $caRefData (index $caRef "key")) | default $caTrustBundle) }}
   {{- end }}{{- $fdList := list }}
   {{- range $_, $fd := $failureDomains }}
   {{- $topo := (index $fd "topology" | default dict) }}
