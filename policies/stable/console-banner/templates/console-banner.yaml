@@ -20,7 +20,6 @@ spec:
           name: create-console
         spec:
           object-templates-raw: |
-              '{{ "{{-" }} $infrastructure_id := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName {{ "}}" }}'
               - complianceType: musthave
                 objectDefinition:
                   apiVersion: console.openshift.io/v1
@@ -28,7 +27,7 @@ spec:
                   metadata:
                     name: console-banner-name
                   spec:
-                    text: '{{ "{{hub" }} $infrastructure_id {{ "hub}}" }}'
+                    text: '{{ "{{hub" }} index .ManagedClusterLabels "clusterName" {{ "hub}}" }}'
                     link:
                       href: 'https://www.example.com'
                       text: '{{ "{{hub" }} index .ManagedClusterLabels "clusterName" | default "CLUSTER" {{ "hub}}" }}'
