@@ -79,15 +79,13 @@ object-templates-raw: |
   {{- $mirrorUrl = (printf "%s/%s" $mirrorHost $mirrorPath) }}
   {{- end }}
   {{- $mirrors := (index $config "mirrors" | default list) }}
-  {{- $caTrustBundle := dict }}
-  {{- $caTrustBundle := (index $mirrorReg "ca" | default dict) }}
+  {{- $caTrustBundle := (index $mirrorReg "ca" | default "") }}
   {{- $caRef := (index $mirrorReg "caRef" | default dict) }}
   {{- if not (empty $caRef) }}
   {{- $caRefNs := (index $caRef "namespace" | default $secretSourceNs) }}
   {{- $caRefCM := (lookup "v1" "ConfigMap" $caRefNs (index $caRef "name")) | default dict }}
   {{- $caRefData := (index $caRefCM "data" | default dict) }}
-  {{- if not (empty ($caRefData)) }}
-  {{- $caTrustBundle = (index $caRefData (index $caRef "key") }}
+  {{- $caTrustBundle = (index $caRefData (index $caRef "key") | default $caTrustBundle) }}
   {{- end }}
   {{- end }}{{- $fdList := list }}
   {{- range $_, $fd := $failureDomains }}
