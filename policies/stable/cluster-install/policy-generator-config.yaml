@@ -69,4 +69,4 @@ policies:
       - name: policy-cluster-install-prereqs
       - name: policy-cluster-install-secrets
     manifests:
-      - path: manifests/vmware-test.yaml
+      - path: manifests/vsphere-test.yaml
