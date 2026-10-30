@@ -78,7 +78,7 @@ object-templates-raw: |
   {{- if $mirrorPath }}
   {{- $mirrorUrl = (printf "%s/%s" $mirrorHost $mirrorPath) }}
   {{- end }}
-  {{- $mirrors := (index $config "mirrors" | default list) }}
+  {{- $mirrors := (index $mirrorReg "mirrors" | default list) }}
   {{- $caTrustBundle := (index $mirrorReg "ca" | default "") }}
   {{- $caRef := (index $mirrorReg "caRef" | default dict) }}
   {{- if not (empty $caRef) }}
@@ -179,14 +179,17 @@ object-templates-raw: |
   {{- if $fips }}
   {{- $_ := set $installConfig "fips" true }}
   {{- end }}
-  {{- $imageSources := list }}
   {{- if (gt (len $mirrors) 0) }}
+  {{- $imageSources := list }}
   {{- range $_, $entry := $mirrors }}
-  {{- $source := (index $entry "source" | default "") }}
+  {{- $source := (index $entry "source") }}
   {{- $mirrorLoc := (index $entry "mirror" | default "") }}
+  {{- if $mirrorLoc }}
+  {{- $mirrorLoc = (printf "%s/%s" $mirrorHost $mirrorLoc) }}
+  {{- else }}
   {{- $mirrorLoc = $mirrorUrl }}
-  {{- $imageSources = append $imageSources (dict "source" $source "mirrors" (list $mirrorLoc)) }}
   {{- end }}
+  {{- $imageSources = append $imageSources (dict "source" $source "mirrors" (list $mirrorLoc)) }}
   {{- end }}
   {{- $_ := set $installConfig "imageDigestSources" $imageSources }}
   {{- end }}
