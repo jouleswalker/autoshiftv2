@@ -33,12 +33,15 @@ object-templates-raw: |
   {{- $certRefKey := (index $certRef "key" | default "cacert") }}
   {{- $certRefNs := (index $certRef "namespace" | default $secretSourceNs) }}
   {{- $sshPublicKey := (index $vsphere "sshPublicKey" | default "") }}
+  {{- $sshPrivateKey := (index $vsphere "sshPublicKey" | default "") }}
   {{- $sshKeyRef := (index $vsphere "sshKeyRef" | default dict) }}
-  {{- if not (empty $sshKeyRef) }}
   {{- $refName := (index $sshKeyRef "name") }}
   {{- $refKey := (index $sshKeyRef "key" | default "ssh-publickey") }}
   {{- $refNs := (index $sshKeyRef "namespace" | default $secretSourceNs) }}
-  {{- $sshPublicKey = (fromSecret $refNs $refName $refKey | base64dec) }}
+  {{- if not (empty $sshKeyRef) }}
+  {{- $refName = (index $sshKeyRef "name") }}
+  {{- $refKey = (index $sshKeyRef "key" | default "ssh-publickey") }}
+  {{- $refNs = (index $sshKeyRef "namespace" | default $secretSourceNs) }}
   {{- end }}{{- $fips := (eq (printf "%v" (index $vsphere "fips" | default false)) "true") }}
   {{- $networkType := (index $vsphere "networkType" | default "OVNKubernetes") }}
   {{- $apiVIPs := (index $vsphere "apiVIPs" | default list) }}
@@ -173,7 +176,7 @@ object-templates-raw: |
       ))
       "platform" (dict "vsphere" $vspherePlatform)
       "pullSecret" ""
-      "sshKey" $sshPublicKey
+      "sshKey" (fromSecret $refNs $refName $refKey | base64dec)
       "diskType" $diskType
   ) }}
   {{- if $fips }}
@@ -191,7 +194,12 @@ object-templates-raw: |
   {{- end }}
   {{- $imageSources = append $imageSources (dict "source" $source "mirrors" (list $mirrorLoc)) }}
   {{- end }}
-  {{- $_ := set $installConfig "imageDigestSources" $imageSources }}
+  {{- $mirrorField := "imageDigestSources" }}
+  {{- $versionParts := (splitList "." (printf "%v" (index $ci "openshiftVersion" | default ""))) }}
+  {{- if and (ge (len $versionParts) 2) (eq (index $versionParts 0) "4") (lt (atoi (index $versionParts 1)) 21) }}
+  {{- $mirrorField = "imageContentSources" }}
+  {{- end }}
+  {{- $_ := set $installConfig $mirrorField $imageSources }}
   {{- end }}
   {{- if $caTrustBundle }}
   {{- $_ := set $installConfig "additionalTrustBundle" $caTrustBundle }}
@@ -265,6 +273,17 @@ object-templates-raw: |
       kind: Secret
       type: Opaque
       metadata:
+        name: {{ $clusterName }}-private-key
+        namespace: {{ $clusterName }}
+      stringData:
+        ssh-privatekey: {{ fromSecret $refNs $refName "ssh-privatekey" | base64dec }}
+
+  - complianceType: musthave
+    objectDefinition:
+      apiVersion: v1
+      kind: Secret
+      type: Opaque
+      metadata:
         name: {{ $clusterName }}-install-config
         namespace: {{ $clusterName }}
       data:
@@ -306,6 +325,8 @@ object-templates-raw: |
         provisioning:
           installConfigSecretRef:
             name: {{ $clusterName }}-install-config
+          sshPrivateKeySecretRef:
+            name: {{ $clusterName }}-private-key
           imageSetRef:
             name: {{ $imageSet }}
         pullSecretRef:
