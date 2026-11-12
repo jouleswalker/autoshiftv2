@@ -5,11 +5,7 @@ metadata:
 # Multiple policies share one placement, so the binding must be named.
 placementBindingDefaults:
   name: binding-policy-proxy
-# Day-2 OpenShift upgrade, staged: set the channel, assert openshift-version exists in
-# availableUpdates (inform, clear error), drive the ClusterVersion once it validates, and
-# report completion (inform). A cluster upgrades when it lands in a clusterset whose
-# openshift-version is higher than its current version; blast radius is controlled by
-# clusterset membership (roll out in waves). See docs/ocp-upgrade.md.
+# Day-2 OpenShift proxy can be configured during install and enforced as a day 2 operation
 #
 # Design note: the inform checks decide Compliant/NonCompliant in Go template logic and force
 # NonCompliant with a mustnothave on the ClusterVersion (an object that always exists) — ACM does not
@@ -33,21 +29,22 @@ policyDefaults:
   placement:
     placementPath: placement.yaml
 policies:
-  # 1. Channel (enforce, unconditional) — so availableUpdates recomputes for the desired channel and
-  #    the y-stream case can't deadlock the dependency below.
+  # 1. Proxy (enforce, unconditional) — cluster proxy will be configured with specified httpProxy,
+  #    httpsProxy, noProxy variables, and a trustedCA config map
   - name: policy-proxy
     remediationAction: inform
+    dependencies:
+      - name: check-proxy-trusted-ca
+        compliance: Compliant
     manifests:
       - path: manifests/proxy.yaml
 
-
-  # 4. Completion status (inform) — Compliant once the cluster has reached the target version
-  #    (latest Completed history >= target). Non-flapping; this is the wave-rollout gate.
-  #- name: policy-openshift-upgrade-status
-  #  remediationAction: inform
-  #  manifests:
-  #    - path: test/openshift-upgrade-status.yaml
-  #  customMessage:
-  #    noncompliant: >
-  #      Cluster does not have required trustedCA config map. 
-  #.     proxy cannot be applied until CA with correct name is applied to cluster.
+  # 4. Completion status (inform) — Compliant if the cluster has the specified CA configmap.
+  - name: policy-check-proxy-trusted-ca
+    remediationAction: inform
+    manifests:
+      - path: test/check-proxy-trusted-ca.yaml
+    customMessage:
+      noncompliant: >
+        Cluster does not have required trustedCA config map. 
+        proxy cannot be applied until CA with correct name is applied to cluster.
