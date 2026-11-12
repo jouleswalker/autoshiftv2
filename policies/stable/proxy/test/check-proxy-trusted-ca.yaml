@@ -13,4 +13,4 @@ object-templates-raw: |
         name: {{hub $trustedCA hub}}
         namespace: openshift-config
       data:
-        ca-bundle.crt:
+        ca-bundle.crt: '(?s).*'
