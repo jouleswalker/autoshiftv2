@@ -15,6 +15,6 @@ object-templates-raw: |
       spec:
         httpProxy: '{{hub $httpProxy | quote hub}}'
         httpsProxy: '{{hub $httpsProxy | quote  hub}}'
-        noProxy: '{{hub $noProxy | quote hub}}'
+        noProxy: {{hub $noProxy | quote hub}}
         trustedCA:
           name: '{{hub $trustedCA hub}}'
