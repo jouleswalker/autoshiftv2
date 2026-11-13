@@ -21,9 +21,9 @@ hubClusterSets:
   hub:
     config:
       proxy:
-        httpProxy: 'http'
-        httpsProxy: 'https'
-        noProxy: 'no'
+        httpProxy: 'http://proxy.org:8080'
+        httpsProxy: 'http://proxy.org:8080'
+        noProxy: 'no,.cluster,127.0.0.1,.local.cluster'
         trustedCA: 'user-ca'
     labels:
       # Required: OpenShift version for image mirroring and compatibility
