@@ -53,4 +53,4 @@ hubClusterSets:
       # acm-search-storage-class: 'ocs-storagecluster-ceph-rbd'
       # acm-search-storage-size: '100Gi'
       #proxy
-      proxy: 'true'
+      proxy: 'false'
