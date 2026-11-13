@@ -32,7 +32,6 @@ policies:
   # 1. Proxy (enforce, unconditional) — cluster proxy will be configured with specified httpProxy,
   #    httpsProxy, noProxy variables, and a trustedCA config map
   - name: policy-proxy
-    remediationAction: inform
     dependencies:
       - name: policy-check-proxy-trusted-ca
         compliance: Compliant
@@ -47,4 +46,5 @@ policies:
     customMessage:
       noncompliant: >
         Cluster does not have required trustedCA config map. 
-        proxy cannot be applied until CA with correct name is applied to cluster.
+        proxy cannot be applied until a CA in the correctly
+        named config map is applied to cluster.
