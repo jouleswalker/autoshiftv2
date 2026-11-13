@@ -13,4 +13,3 @@ object-templates-raw: |
       metadata:
         name: {{hub $trustedCA hub}}
         namespace: openshift-config
-      data:
