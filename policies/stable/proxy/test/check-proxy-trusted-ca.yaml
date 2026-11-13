@@ -6,6 +6,7 @@ object-templates-raw: |
   {{- /*$configMapCA := (lookup "config.openshift.io/v1" "ConfigMap" "openshift-config" $trustedCA).data */ -}}
 
   - complianceType: musthave
+    recordDiff: InStatus
     objectDefinition:
       apiVersion: v1
       kind: ConfigMap
