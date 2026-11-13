@@ -34,7 +34,7 @@ policies:
   - name: policy-proxy
     remediationAction: inform
     dependencies:
-      - name: check-proxy-trusted-ca
+      - name: policy-check-proxy-trusted-ca
         compliance: Compliant
     manifests:
       - path: manifests/proxy.yaml
