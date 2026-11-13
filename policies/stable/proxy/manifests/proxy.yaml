@@ -13,8 +13,8 @@ object-templates-raw: |
       metadata:
         name: cluster
       spec:
-        httpProxy: '{{hub $httpProxy | quote hub}}'
-        httpsProxy: '{{hub $httpsProxy | quote  hub}}'
+        httpProxy: '{{hub $httpProxy hub}}'
+        httpsProxy: {{hub $httpsProxy  hub}}
         noProxy: {{hub $noProxy | quote hub}}
         trustedCA:
           name: '{{hub $trustedCA hub}}'
